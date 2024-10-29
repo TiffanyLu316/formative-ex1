@@ -1,0 +1,50 @@
+---
+title: "formative-ex1"
+author: '202160196'
+date: "2024-10-29"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Netflix Movies & TV Series Data
+
+We will be using Tidyverse package to transform the Netflix dataset in order to analyze high-quality content on Netflix. This dataset includes basic information on titles as well as IMDb data like ratings and vote counts. The data has been downloaded in late October 2024 from Kaggle and the current version of the dataset was last updated in October 2024. To access the download source see <https://www.kaggle.com/datasets/octopusteam/full-netflix-dataset>.
+
+## Loading Packages
+
+```{r}
+#Loading the package
+library(tidyverse)
+```
+
+## High-quality Content on Netflix
+
+We will first be filtering out any rows where the "url" column is blank or missing, ensuring the dataset only includes entries that have valid links to their corresponding Netflix pages for further information.
+
+Then, we will filter the dataset to show only movies and tv shows with an IMDb rating of 8 or above, focusing on high-quality content entries.
+
+```{r}
+#Loading the Netflix dataset
+netflix_data <- read.csv("/Users/tiffanylu/local/formative-ex1/netflix_data.csv")
+head(netflix_data)
+
+#Transforming dataset into tibbles
+netflix_data <- as_tibble(netflix_data)
+head(netflix_data)
+
+#Remove rows with missing "url" 
+netflix_clean <- netflix_data %>%
+  filter(url != "") #citation: @suzan.rbind.io
+print(netflix_clean)
+
+#Filter for entries with with rating of 8 or above
+netflix_high_quality <- netflix_clean %>%
+  filter(imdbAverageRating == 8 | imdbAverageRating > 8)
+print(netflix_high_quality)
+
+
+
+```
