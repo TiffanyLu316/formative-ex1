@@ -62,6 +62,11 @@ summarize_release_year <- netflix_high_quality %>%
 
 print(summarize_release_year)
 
+#Rename argument to data_new
+data_new <- summarize_release_year
+
+print(data_new)
+
 
 
 ```
