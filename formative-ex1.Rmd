@@ -24,7 +24,7 @@ library(tidyverse)
 
 We will first be filtering out any rows where the "url" column is blank or missing, ensuring the dataset only includes entries that have valid links to their corresponding Netflix pages for further information.
 
-Then, we will filter the dataset to show only movies and tv shows with an IMDb rating of 8 or above, focusing on high-quality content entries.
+Then, we will filter the dataset to show only movies and tv shows with an IMDb rating of 8 or above and votes of , focusing on high-quality content entries.
 
 ```{r}
 #Loading the Netflix dataset
@@ -35,15 +35,32 @@ head(netflix_data)
 netflix_data <- as_tibble(netflix_data)
 head(netflix_data)
 
-#Remove rows with missing "url" 
+#Transformation 1.1: Remove rows with missing "url" 
 netflix_clean <- netflix_data %>%
   filter(url != "") #citation: @suzan.rbind.io
 print(netflix_clean)
 
-#Filter for entries with with rating of 8 or above
+#Transformation 1.2: Filter for entries with with rating of 8 or above
 netflix_high_quality <- netflix_clean %>%
   filter(imdbAverageRating == 8 | imdbAverageRating > 8)
 print(netflix_high_quality)
+
+```
+
+## Organizing Data by Release Year
+
+To create an organized summary of Netflix content by year we will group the dataset by "release_year". For each release year, we calculate the average IMDb rating and vote count, allowing us to identify years with the highest quality content.
+
+```{r}
+#Transformation 2: Group by release year and summarize data
+summarize_release_year <- netflix_high_quality %>%
+  group_by(releaseYear) %>%
+  summarise(
+    avg_imdb_rating = mean(imdbAverageRating, na.rm = TRUE),
+    avg_votes = mean(imdbNumVotes, na.rm = TRUE)) %>%
+  arrange(desc(releaseYear)) #citation: @dtplyr
+
+print(summarize_release_year)
 
 
 
