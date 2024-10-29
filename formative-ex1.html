@@ -388,8 +388,8 @@ blank or missing, ensuring the dataset only includes entries that have
 valid links to their corresponding Netflix pages for further
 information.</p>
 <p>Then, we will filter the dataset to show only movies and tv shows
-with an IMDb rating of 8 or above, focusing on high-quality content
-entries.</p>
+with an IMDb rating of 8 or above and votes of , focusing on
+high-quality content entries.</p>
 <pre class="r"><code>#Loading the Netflix dataset
 netflix_data &lt;- read.csv(&quot;/Users/tiffanylu/local/formative-ex1/netflix_data.csv&quot;)
 head(netflix_data)</code></pre>
@@ -434,7 +434,7 @@ head(netflix_data)</code></pre>
 ## 5 https://… Unfo… Movie Drama…        1992 tt010…               8.2       443163
 ## 6 https://… Eter… Movie Drama…        2004 tt033…               8.3      1100831
 ## # ℹ 1 more variable: availableCountries &lt;chr&gt;</code></pre>
-<pre class="r"><code>#Remove rows with missing &quot;url&quot; 
+<pre class="r"><code>#Transformation 1.1: Remove rows with missing &quot;url&quot; 
 netflix_clean &lt;- netflix_data %&gt;%
   filter(url != &quot;&quot;) #citation: @suzan.rbind.io
 print(netflix_clean)</code></pre>
@@ -453,7 +453,7 @@ print(netflix_clean)</code></pre>
 ## 10 https:/… Talk… Movie Drama…        2002 tt028…               7.9       118626
 ## # ℹ 1,809 more rows
 ## # ℹ 1 more variable: availableCountries &lt;chr&gt;</code></pre>
-<pre class="r"><code>#Filter for entries with with rating of 8 or above
+<pre class="r"><code>#Transformation 1.2: Filter for entries with with rating of 8 or above
 netflix_high_quality &lt;- netflix_clean %&gt;%
   filter(imdbAverageRating == 8 | imdbAverageRating &gt; 8)
 print(netflix_high_quality)</code></pre>
@@ -472,6 +472,54 @@ print(netflix_high_quality)</code></pre>
 ## 10 https:/… Befo… Movie Drama…        2004 tt038…               8.1       294168
 ## # ℹ 394 more rows
 ## # ℹ 1 more variable: availableCountries &lt;chr&gt;</code></pre>
+</div>
+<div id="organizing-data-by-release-year" class="section level2">
+<h2>Organizing Data by Release Year</h2>
+<p>To create an organized summary of Netflix content by year we will
+group the dataset by “release_year”. For each release year, we calculate
+the average IMDb rating and vote count, allowing us to identify years
+with the highest quality content.</p>
+<pre class="r"><code>#Transformation 2: Group by release year and summarize data
+summarize_release_year &lt;- netflix_high_quality %&gt;%
+  group_by(releaseYear) %&gt;%
+  summarise(
+    avg_imdb_rating = mean(imdbAverageRating, na.rm = TRUE),
+    avg_votes = mean(imdbNumVotes, na.rm = TRUE)) %&gt;%
+  arrange(desc(releaseYear)) #citation: @dtplyr
+
+print(summarize_release_year)</code></pre>
+<pre><code>## # A tibble: 60 × 3
+##    releaseYear avg_imdb_rating avg_votes
+##          &lt;int&gt;           &lt;dbl&gt;     &lt;dbl&gt;
+##  1        2024            8.19    16852.
+##  2        2023            8.24    33637.
+##  3        2022            8.24    53795.
+##  4        2021            8.23    87718.
+##  5        2020            8.39    91781.
+##  6        2019            8.38   229585.
+##  7        2018            8.26    45134.
+##  8        2017            8.27   107441.
+##  9        2016            8.25   111230 
+## 10        2015            8.38   146666.
+## # ℹ 50 more rows</code></pre>
+<pre class="r"><code>#Rename argument to data_new
+data_new &lt;- summarize_release_year
+
+print(data_new)</code></pre>
+<pre><code>## # A tibble: 60 × 3
+##    releaseYear avg_imdb_rating avg_votes
+##          &lt;int&gt;           &lt;dbl&gt;     &lt;dbl&gt;
+##  1        2024            8.19    16852.
+##  2        2023            8.24    33637.
+##  3        2022            8.24    53795.
+##  4        2021            8.23    87718.
+##  5        2020            8.39    91781.
+##  6        2019            8.38   229585.
+##  7        2018            8.26    45134.
+##  8        2017            8.27   107441.
+##  9        2016            8.25   111230 
+## 10        2015            8.38   146666.
+## # ℹ 50 more rows</code></pre>
 </div>
 
 
