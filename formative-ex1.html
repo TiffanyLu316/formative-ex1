@@ -9,9 +9,9 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="202160196" />
+<meta name="author" content="LSE Candidate Number:202160196" />
 
-<meta name="date" content="2024-10-29" />
+<meta name="date" content="2024-11-07" />
 
 <title>formative-ex1</title>
 
@@ -351,8 +351,8 @@ display: none;
 
 
 <h1 class="title toc-ignore">formative-ex1</h1>
-<h4 class="author">202160196</h4>
-<h4 class="date">2024-10-29</h4>
+<h4 class="author">LSE Candidate Number:202160196</h4>
+<h4 class="date">2024-11-07</h4>
 
 </div>
 
@@ -383,16 +383,16 @@ library(tidyverse)</code></pre>
 </div>
 <div id="high-quality-content-on-netflix" class="section level2">
 <h2>High-quality Content on Netflix</h2>
-<p>We will first be filtering out any rows where the “url” column is
-blank or missing, ensuring the dataset only includes entries that have
-valid links to their corresponding Netflix pages for further
+<p>We will first be filtering out any rows where the <code>url</code>
+column is blank or missing, ensuring the dataset only includes entries
+that have valid links to their corresponding Netflix pages for further
 information.</p>
 <p>Then, we will filter the dataset to show only movies and tv shows
-with an IMDb rating of 8 or above and votes of , focusing on
+with an IMDb rating of 8 or higher and votes of , focusing on
 high-quality content entries.</p>
 <pre class="r"><code>#Loading the Netflix dataset
-netflix_data &lt;- read.csv(&quot;/Users/tiffanylu/local/formative-ex1/netflix_data.csv&quot;)
-head(netflix_data)</code></pre>
+data &lt;- read.csv(&quot;/Users/tiffanylu/local/formative-ex1/netflix_data.csv&quot;)
+head(data)</code></pre>
 <pre><code>##                                      url                                 title
 ## 1 https://www.netflix.com/title/60000724                          Forrest Gump
 ## 2  https://www.netflix.com/title/1154386                     The Fifth Element
@@ -422,8 +422,8 @@ head(netflix_data)</code></pre>
 ## 5                                                                                                                                                                                                                                                                                                                                                                                                                                                         AU, BA, BE, BG, CZ, HR, HU, MD, ME, MK, NZ, PL, RO, RS, SI, SK
 ## 6 AD, AE, AG, AL, AO, AR, AU, AZ, BA, BB, BE, BG, BH, BM, BO, BR, BS, BY, BZ, CH, CI, CL, CM, CO, CR, CU, CV, CY, CZ, DK, DO, DZ, EC, EE, EG, ES, FI, FJ, FR, GB, GF, GG, GH, GI, GQ, GR, GT, HK, HN, HR, HU, ID, IE, IL, IN, IQ, IS, IT, JM, JO, JP, KE, KR, KW, LB, LC, LT, LU, LV, LY, MA, MC, MD, ME, MG, MK, ML, MT, MU, MX, MY, MZ, NE, NG, NI, NL, NO, NZ, OM, PA, PE, PF, PH, PK, PL, PS, PT, PY, QA, RO, RS, SA, SC, SE, SG, SI, SK, SM, SN, SV, TC, TH, TN, TR, TT, TW, TZ, UA, UG, US, UY, VE, YE, ZA, ZM, ZW</code></pre>
 <pre class="r"><code>#Transforming dataset into tibbles
-netflix_data &lt;- as_tibble(netflix_data)
-head(netflix_data)</code></pre>
+data &lt;- as_tibble(data)
+head(data)</code></pre>
 <pre><code>## # A tibble: 6 × 9
 ##   url       title type  genres releaseYear imdbId imdbAverageRating imdbNumVotes
 ##   &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt;
@@ -434,10 +434,10 @@ head(netflix_data)</code></pre>
 ## 5 https://… Unfo… Movie Drama…        1992 tt010…               8.2       443163
 ## 6 https://… Eter… Movie Drama…        2004 tt033…               8.3      1100831
 ## # ℹ 1 more variable: availableCountries &lt;chr&gt;</code></pre>
-<pre class="r"><code>#Transformation 1.1: Remove rows with missing &quot;url&quot; 
-netflix_clean &lt;- netflix_data %&gt;%
+<pre class="r"><code>#Transformation 1.1: removing rows with missing &quot;url&quot; 
+data_clean &lt;- data %&gt;%
   filter(url != &quot;&quot;) #citation: @suzan.rbind.io
-print(netflix_clean)</code></pre>
+print(data_clean)</code></pre>
 <pre><code>## # A tibble: 1,819 × 9
 ##    url      title type  genres releaseYear imdbId imdbAverageRating imdbNumVotes
 ##    &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;        &lt;int&gt; &lt;chr&gt;              &lt;dbl&gt;        &lt;int&gt;
@@ -453,8 +453,8 @@ print(netflix_clean)</code></pre>
 ## 10 https:/… Talk… Movie Drama…        2002 tt028…               7.9       118626
 ## # ℹ 1,809 more rows
 ## # ℹ 1 more variable: availableCountries &lt;chr&gt;</code></pre>
-<pre class="r"><code>#Transformation 1.2: Filter for entries with with rating of 8 or above
-netflix_high_quality &lt;- netflix_clean %&gt;%
+<pre class="r"><code>#Transformation 1.2: filtering for entries with rating of 8 or higher
+netflix_high_quality &lt;- data_clean %&gt;%
   filter(imdbAverageRating == 8 | imdbAverageRating &gt; 8)
 print(netflix_high_quality)</code></pre>
 <pre><code>## # A tibble: 404 × 9
@@ -476,16 +476,16 @@ print(netflix_high_quality)</code></pre>
 <div id="organizing-data-by-release-year" class="section level2">
 <h2>Organizing Data by Release Year</h2>
 <p>To create an organized summary of Netflix content by year we will
-group the dataset by “release_year”. For each release year, we calculate
-the average IMDb rating and vote count, allowing us to identify years
-with the highest quality content.</p>
+group the dataset by <code>release_year</code>. For each release year,
+we calculate the average IMDb rating and vote count, allowing us to
+identify years with the highest quality content.</p>
 <pre class="r"><code>#Transformation 2: Group by release year and summarize data
 summarize_release_year &lt;- netflix_high_quality %&gt;%
   group_by(releaseYear) %&gt;%
   summarise(
-    avg_imdb_rating = mean(imdbAverageRating, na.rm = TRUE),
-    avg_votes = mean(imdbNumVotes, na.rm = TRUE)) %&gt;%
-  arrange(desc(releaseYear)) #citation: @dtplyr
+    avg_imdb_rating = round(mean(imdbAverageRating, na.rm = TRUE), 2),
+    avg_votes = round(mean(imdbNumVotes, na.rm = TRUE), 2)) %&gt;%
+    arrange(desc(releaseYear)) #citation: @dtplyr
 
 print(summarize_release_year)</code></pre>
 <pre><code>## # A tibble: 60 × 3
